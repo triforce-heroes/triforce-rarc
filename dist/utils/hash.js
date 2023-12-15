@@ -1,0 +1,1 @@
+export function hash(t){let e=0;for(let n=0;n<t.length;n++)e*=3,(e+=t.codePointAt(n))>65535&&(e&=65535);return e}

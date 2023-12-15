@@ -1,0 +1,32 @@
+{
+  "name": "@triforce-heroes/triforce-rarc",
+  "description": "Extract and rebuild RARC files.",
+  "version": "1.0.0",
+  "license": "Apache License 2.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf ./dist && tsc -p ./tsconfig.build.json && swc ./dist -d ./dist",
+    "prettier": "prettier --check ./src",
+    "prettier:fix": "prettier --write ./src",
+    "eslint": "eslint ./src",
+    "eslint:fix": "eslint --fix ./src",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@rheactor/eslint-config-rheactor": "github:rheactor/eslint-config-rheactor",
+    "@swc/cli": "^0.1.63",
+    "@swc/core": "^1.3.100",
+    "@triforce-heroes/triforce-core": "link:..\\triforce-core",
+    "@triforce-heroes/triforce-parser": "link:..\\triforce-parser",
+    "@triforce-heroes/triforce-yaz": "link:..\\triforce-yaz",
+    "@types/node": "^20.10.4",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4"
+  }
+}
