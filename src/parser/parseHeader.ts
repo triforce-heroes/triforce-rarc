@@ -1,4 +1,8 @@
-import { ParserCallback } from "@triforce-heroes/triforce-parser";
+import {
+  BufferConsumer,
+  ByteOrder,
+  fatal,
+} from "@triforce-heroes/triforce-core";
 
 export interface DataHeader {
   length: number;
@@ -11,15 +15,12 @@ export interface DataHeader {
   stringsOffset: number;
 }
 
-// eslint-disable-next-line func-style
-export const parseHeader: ParserCallback<DataHeader> = ({
-  consumer,
-  error,
-}) => {
+export function parseHeader(buffer: Buffer) {
+  const consumer = new BufferConsumer(buffer, undefined, ByteOrder.BIG_ENDIAN);
   const magic = consumer.readString(4);
 
   if (magic !== "RARC") {
-    error("Not a RARC file.");
+    fatal("Not a RARC file.");
   }
 
   consumer.skip(
@@ -60,4 +61,4 @@ export const parseHeader: ParserCallback<DataHeader> = ({
     stringsLength,
     stringsOffset,
   };
-};
+}

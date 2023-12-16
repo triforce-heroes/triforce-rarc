@@ -17,9 +17,6 @@ devDependencies:
   '@triforce-heroes/triforce-core':
     specifier: link:..\triforce-core
     version: link:../triforce-core
-  '@triforce-heroes/triforce-parser':
-    specifier: link:..\triforce-parser
-    version: link:../triforce-parser
   '@types/node':
     specifier: ^20.10.4
     version: 20.10.4

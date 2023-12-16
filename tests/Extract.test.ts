@@ -1,10 +1,9 @@
 import { readFileSync } from "node:fs";
 
-import { BufferConsumer, ByteOrder } from "@triforce-heroes/triforce-core";
 import { describe, expect, it } from "vitest";
 
+import { extract } from "../src/Extract.js";
 import { DataNode } from "../src/parser/parseNodes.js";
-import { parser } from "../src/parser/parser.js";
 
 describe("extract", () => {
   const samples: Array<[string, DataNode[]]> = [
@@ -25,13 +24,7 @@ describe("extract", () => {
 
   it.each(samples)("extract %s.rarc", (name, structure) => {
     expect(structure).toStrictEqual(
-      parser.parse(
-        new BufferConsumer(
-          readFileSync(`${__dirname}/fixtures/${name}.rarc`),
-          undefined,
-          ByteOrder.BIG_ENDIAN,
-        ),
-      ),
+      extract(readFileSync(`${__dirname}/fixtures/${name}.rarc`)),
     );
   });
 });

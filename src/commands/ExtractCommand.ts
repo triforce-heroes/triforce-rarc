@@ -1,14 +1,9 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { normalize } from "node:path";
 
-import {
-  BufferConsumer,
-  ByteOrder,
-  fatal,
-} from "@triforce-heroes/triforce-core";
+import { fatal } from "@triforce-heroes/triforce-core";
 
-import { DataNode } from "../parser/parseNodes.js";
-import { parser } from "../parser/parser.js";
+import { extract } from "../Extract.js";
 
 export function ExtractCommand(input: string, output?: string) {
   if (!existsSync(input)) {
@@ -19,9 +14,7 @@ export function ExtractCommand(input: string, output?: string) {
 
   process.stdout.write(`Extracting ${normalize(input)} to ${outputPath}... `);
 
-  const nodes = parser.parse(
-    new BufferConsumer(readFileSync(input), undefined, ByteOrder.BIG_ENDIAN),
-  ) as DataNode[];
+  const nodes = extract(readFileSync(input));
 
   for (const node of nodes) {
     const nodeIdentifier =
