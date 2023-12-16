@@ -1,4 +1,4 @@
-import { ParserCallback } from "@triforce-heroes/triforce-parser";
+/// <reference types="node" resolution-mode="require"/>
 export interface DataHeader {
     length: number;
     dataOffset: number;
@@ -9,4 +9,13 @@ export interface DataHeader {
     stringsLength: number;
     stringsOffset: number;
 }
-export declare const parseHeader: ParserCallback<DataHeader>;
+export declare function parseHeader(buffer: Buffer): {
+    length: number;
+    dataOffset: number;
+    nodesCount: number;
+    nodesOffset: number;
+    entriesCount: number;
+    entriesOffset: number;
+    stringsLength: number;
+    stringsOffset: number;
+};

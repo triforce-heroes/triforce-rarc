@@ -1,1 +1,1 @@
-import{BufferConsumer as r}from"@triforce-heroes/triforce-core";import{parser as e}from"./parser/parser.js";export function extract(o){return e.parse(new r(o,void 0,1))}
+import{parseEntries as r}from"./parser/parseEntries.js";import{parseHeader as e}from"./parser/parseHeader.js";import{parseNodes as s}from"./parser/parseNodes.js";import{parseNames as p}from"./parser/parseStrings.js";export function extract(t){let o=e(t),a=p(t,o),m=r(t,o,a);return s(t,o,a,m)}

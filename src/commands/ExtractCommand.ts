@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { normalize } from "node:path";
+import { basename, dirname, normalize } from "node:path";
 
 import { fatal } from "@triforce-heroes/triforce-core";
 
@@ -10,16 +10,27 @@ export function ExtractCommand(input: string, output?: string) {
     fatal(`File not found: ${input}`);
   }
 
-  const outputPath = normalize(output ?? `${input}.out`);
+  const inputDirname = dirname(input);
+  const inputBasename = basename(input, ".rarc");
 
-  process.stdout.write(`Extracting ${normalize(input)} to ${outputPath}... `);
+  const outputNormalized = normalize(
+    output ?? `${inputDirname}/${inputBasename}`,
+  );
+
+  process.stdout.write(
+    `Extracting ${normalize(input)} to ${outputNormalized}... `,
+  );
 
   const nodes = extract(readFileSync(input));
 
   for (const node of nodes) {
     const nodeIdentifier =
       node.identifier === "ROOT" ? "" : `${node.identifier}$`;
-    const nodePath = normalize(`${outputPath}/${nodeIdentifier}${node.name}`);
+
+    const nodePath =
+      node.identifier === "ROOT" && node.name === inputBasename
+        ? normalize(`${inputDirname}/${nodeIdentifier}${node.name}`)
+        : normalize(`${outputNormalized}/${nodeIdentifier}${node.name}`);
 
     mkdirSync(nodePath, { recursive: true });
 
