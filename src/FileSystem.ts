@@ -50,7 +50,7 @@ export class FileSystem {
     const nodesBuilder = new BufferBuilder(ByteOrder.BIG_ENDIAN);
     const entriesBuilder = new BufferBuilder(ByteOrder.BIG_ENDIAN);
     const namesBuilder = new BufferBuilder(ByteOrder.BIG_ENDIAN);
-    const dataBuilder = new BufferBuilder(ByteOrder.BIG_ENDIAN);
+    const datasBuilder = new BufferBuilder(ByteOrder.BIG_ENDIAN);
 
     const headerLength = 0x20;
     const infoLength = 0x20;
@@ -75,13 +75,18 @@ export class FileSystem {
         entryBuilder.writeUnsignedInt16(hash(entry.name));
         entryBuilder.writeUnsignedInt16(EntryType.FILE);
         entryBuilder.writeUnsignedInt16(namesBuilder.length);
-        entryBuilder.writeUnsignedInt32(dataBuilder.length);
+        entryBuilder.writeUnsignedInt32(datasBuilder.length);
         entryBuilder.writeUnsignedInt32(entry.data.length);
         entryBuilder.writeUnsignedInt32(0);
 
         namesBuilder.writeNullTerminatedString(entry.name);
 
+        const dataBuilder = new BufferBuilder(ByteOrder.BIG_ENDIAN);
+
         dataBuilder.push(entry.data);
+        dataBuilder.write(16 - (entry.data.length % 16));
+
+        datasBuilder.push(dataBuilder.build());
         entriesBuilder.push(entryBuilder.build());
       }
 
@@ -91,14 +96,18 @@ export class FileSystem {
     const nodesBuffer = nodesBuilder.build();
     const nodesOffset = infoLength;
 
+    entriesBuilder.write(16 - (entriesBuilder.length % 16));
+
     const entriesBuffer = entriesBuilder.build();
     const entriesOffset = nodesOffset + nodesBuffer.length;
+
+    namesBuilder.write(16 - (namesBuilder.length % 16));
 
     const namesBuffer = namesBuilder.build();
     const namesOffset = entriesOffset + entriesBuffer.length;
 
-    const dataBuffer = dataBuilder.build();
-    const dataOffset = namesOffset + namesBuffer.length;
+    const datasBuffer = datasBuilder.build();
+    const datasOffset = namesOffset + namesBuffer.length;
 
     infoBuilder.writeUnsignedInt32(this.nodes.length);
     infoBuilder.writeUnsignedInt32(infoLength);
@@ -118,12 +127,12 @@ export class FileSystem {
         nodesBuffer.length +
         entriesBuffer.length +
         namesBuffer.length +
-        dataBuffer.length,
+        datasBuffer.length,
     );
     headerBuilder.writeUnsignedInt32(headerLength);
-    headerBuilder.writeUnsignedInt32(dataOffset);
-    headerBuilder.writeUnsignedInt32(dataBuffer.length);
-    headerBuilder.writeUnsignedInt32(dataBuffer.length);
+    headerBuilder.writeUnsignedInt32(datasOffset);
+    headerBuilder.writeUnsignedInt32(datasBuffer.length);
+    headerBuilder.writeUnsignedInt32(datasBuffer.length);
     headerBuilder.writeUnsignedInt32(0);
     headerBuilder.writeUnsignedInt32(0);
 
@@ -133,7 +142,7 @@ export class FileSystem {
       nodesBuffer,
       entriesBuffer,
       namesBuffer,
-      dataBuffer,
+      datasBuffer,
     ]);
   }
 }
