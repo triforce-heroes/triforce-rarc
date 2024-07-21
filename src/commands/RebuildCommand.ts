@@ -7,7 +7,7 @@ import {
 } from "node:fs";
 import { basename, normalize } from "node:path";
 
-import { fatal } from "@triforce-heroes/triforce-core";
+import { fatal } from "@triforce-heroes/triforce-core/Console";
 
 import { FileSystem } from "../FileSystem.js";
 

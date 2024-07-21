@@ -1,4 +1,5 @@
-import { BufferBuilder, ByteOrder } from "@triforce-heroes/triforce-core";
+import { BufferBuilder } from "@triforce-heroes/triforce-core/BufferBuilder";
+import { ByteOrder } from "@triforce-heroes/triforce-core/types/ByteOrder";
 
 import { EntryType } from "./types/EntryType.js";
 import { hash } from "./utils/hash.js";

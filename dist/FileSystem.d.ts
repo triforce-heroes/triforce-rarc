@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 declare abstract class NodeEntry {
     readonly name: string;
     constructor(name: string);

@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 export interface DataHeader {
     length: number;
     dataOffset: number;

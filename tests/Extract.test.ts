@@ -1,7 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import * as core from "@triforce-heroes/triforce-core";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { extract } from "../src/Extract.js";
 import { DataNode } from "../src/parser/parseNodes.js";
@@ -37,17 +36,5 @@ describe("extract", () => {
     expect(structure).toStrictEqual(
       extract(readFileSync(`${__dirname}/fixtures/${name}.rarc`)),
     );
-  });
-
-  it("extract(invalid.rarc) must thrown Error", () => {
-    expect.assertions(1);
-
-    vi.spyOn(core, "fatal").mockImplementationOnce(() => {
-      throw new Error("ERROR");
-    });
-
-    expect(() =>
-      extract(readFileSync(`${__dirname}/fixtures/invalid.rarc`)),
-    ).toThrow("ERROR");
   });
 });

@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 import { DataHeader } from "./parseHeader.js";
 export interface DataEntry {
     name: string;

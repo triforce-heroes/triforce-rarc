@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 import { DataEntry } from "./parseEntries.js";
 import { DataHeader } from "./parseHeader.js";
 export interface DataNode {

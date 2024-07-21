@@ -1,1 +1,1 @@
-import{BufferConsumer as e}from"@triforce-heroes/triforce-core";export function parseNames(r,t){let s=t.length+t.stringsOffset,n=new Map,o=new e(r.subarray(s,s+t.stringsLength),void 0,1);for(;!o.isConsumed();)n.set(o.byteOffset,o.readNullTerminatedString());return n}
+import{BufferConsumer as e}from"@triforce-heroes/triforce-core/BufferConsumer";export function parseNames(r,t){let s=t.length+t.stringsOffset,n=new Map,o=new e(r.subarray(s,s+t.stringsLength),void 0,1);for(;!o.isConsumed();)n.set(o.byteOffset,o.readNullTerminatedString());return n}
