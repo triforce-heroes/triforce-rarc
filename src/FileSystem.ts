@@ -58,10 +58,12 @@ export class FileSystem {
 
     let entriesIndex = 0;
 
+    namesBuilder.writeNullTerminatedString(".");
+
     for (const node of this.nodes) {
       const nodeBuilder = new BufferBuilder(ByteOrder.BIG_ENDIAN);
 
-      nodeBuilder.writeString(node.identifier);
+      nodeBuilder.writeString(node.identifier.padEnd(4, " "));
       nodeBuilder.writeUnsignedInt32(namesBuilder.length);
       nodeBuilder.writeUnsignedInt16(hash(node.name));
       nodeBuilder.writeUnsignedInt16(node.entries.length);
@@ -85,7 +87,7 @@ export class FileSystem {
         const dataBuilder = new BufferBuilder(ByteOrder.BIG_ENDIAN);
 
         dataBuilder.push(entry.data);
-        dataBuilder.write(16 - (entry.data.length % 16));
+        dataBuilder.pad(32);
 
         datasBuilder.push(dataBuilder.build());
         entriesBuilder.push(entryBuilder.build());
@@ -97,12 +99,14 @@ export class FileSystem {
     const nodesBuffer = nodesBuilder.build();
     const nodesOffset = infoLength;
 
-    entriesBuilder.write(16 - (entriesBuilder.length % 16));
+    entriesBuilder.pad(16);
 
     const entriesBuffer = entriesBuilder.build();
     const entriesOffset = nodesOffset + nodesBuffer.length;
 
-    namesBuilder.write(16 - (namesBuilder.length % 16));
+    const namesBufferLength = namesBuilder.length;
+
+    namesBuilder.pad(32);
 
     const namesBuffer = namesBuilder.build();
     const namesOffset = entriesOffset + entriesBuffer.length;
@@ -114,7 +118,7 @@ export class FileSystem {
     infoBuilder.writeUnsignedInt32(infoLength);
     infoBuilder.writeUnsignedInt32(entriesIndex);
     infoBuilder.writeUnsignedInt32(entriesOffset);
-    infoBuilder.writeUnsignedInt32(namesBuffer.length);
+    infoBuilder.writeUnsignedInt32(namesBufferLength);
     infoBuilder.writeUnsignedInt32(namesOffset);
     infoBuilder.writeUnsignedInt32(0);
     infoBuilder.writeUnsignedInt32(0);

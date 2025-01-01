@@ -12,6 +12,6 @@ declare class Node {
 export declare class FileSystem {
     private readonly nodes;
     createNode(identifier: string, name: string): Node;
-    build(): Buffer;
+    build(): Buffer<ArrayBuffer>;
 }
 export {};
